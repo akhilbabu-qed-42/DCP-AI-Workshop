@@ -1,0 +1,101 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\ai\OperationType\Chat\ChatInput;
+use Drupal\ai\OperationType\Chat\ChatMessage;
+use Drupal\ai_agents\PluginInterfaces\AiAgentInterface;
+use Drupal\dcp_ai_workshop\Plugin\AiFunctionCall\UpdateCookingInstructions;
+
+/**
+ * Implements hook_entity_presave().
+ */
+function dcp_ai_workshop_entity_presave(EntityInterface $entity) {
+    // Handle task nodes.
+    if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'task') {
+      $provider = \Drupal::service('ai.provider')->getDefaultProviderForOperationType('chat');
+      $provider_instance = \Drupal::service('ai.provider')->createInstance($provider['provider_id']);
+  
+      $value = $entity->get('field_task_description')->value;
+      $type = $entity->get('field_task_type')->value;
+  
+      // Select agent based on task type.
+      $agent = NULL;
+      if ($type === 'email_campaign') {
+        $agent = \Drupal::service('plugin.manager.ai_agents')->createInstance('email_campaign_generator');
+        // Append target audience details with the user instructions.
+        $value .= 'Create campaign mails tailoe for the following target audience. ' .  PHP_EOL;
+        $value .= get_taxonomy_labels($entity, 'field_targeted_audience');
+      }
+      elseif ($type === 'recipe_generation') {
+        $agent = \Drupal::service('plugin.manager.ai_agents')->createInstance('recipe_generator');
+      }
+  
+      if ($agent) {
+        $agent->setChatInput(new ChatInput([
+          new ChatMessage('user', strip_tags($value)),
+        ]));
+        $agent->setAiProvider($provider_instance);
+        $agent->setModelName($provider['model_id']);
+        $agent->setCreateDirectly(TRUE);
+  
+        $solvability = $agent->determineSolvability();
+        if ($solvability === AiAgentInterface::JOB_SOLVABLE) {
+          \Drupal::messenger()->addMessage('Agent successfully ran.');
+        }
+        else {
+          \Drupal::messenger()->addMessage('There was an unexpected error.', 'error');
+        }
+      }
+    }
+  
+    // Handle recipe nodes.
+    if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'recipe') {
+      $provider = \Drupal::service('ai.provider')->getDefaultProviderForOperationType('chat');
+      $provider_instance = \Drupal::service('ai.provider')->createInstance($provider['provider_id']);
+  
+      $value = $entity->get('field_editor_feedback')->value;
+
+      if (!empty($value)) {
+        $agent = \Drupal::service('plugin.manager.ai_agents')->createInstance('recipe_editor');
+        $agent->setChatInput(new ChatInput([
+          new ChatMessage('user', strip_tags($value)),
+        ]));
+        $agent->setAiProvider($provider_instance);
+        $agent->setModelName($provider['model_id']);
+        $agent->setTokenContexts(['node' => $entity]);
+    
+        $solvability = $agent->determineSolvability();
+        if ($solvability === AiAgentInterface::JOB_SOLVABLE) {
+          $tool_results = $agent->getToolResults(TRUE);
+          foreach ($tool_results as $tool) {
+            if ($tool instanceof UpdateCookingInstructions) {
+              $result = json_decode($tool->getReadableOutput(), TRUE);
+              if (!empty($result['cooking_instructions'])) {
+                $entity->set('field_recipe_instruction', [
+                  'value' => $result['cooking_instructions'],
+                  'format' => 'full_html',
+                ]);
+              }
+            }
+          }
+        }
+        else {
+            \Drupal::messenger()->addMessage($solvability);
+          \Drupal::messenger()->addMessage('There was an unexpected error.', 'error');
+        }
+      }
+    }
+  }
+
+function get_taxonomy_labels(EntityInterface $entity, string $field_name): string {
+    $labels = [];
+  
+    if ($entity->hasField($field_name) && !$entity->get($field_name)->isEmpty()) {
+      $terms = $entity->get($field_name)->referencedEntities();
+      foreach ($terms as $term) {
+        $labels[] = $term->label();
+      }
+    }
+  
+    return implode("\n", $labels);
+}

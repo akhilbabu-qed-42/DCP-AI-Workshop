@@ -1,0 +1,74 @@
+langcode: en
+status: true
+dependencies: {  }
+id: recipe_generator
+label: 'Recipe generator'
+description: 'Recipe generator'
+system_prompt: |-
+  You are a helpfull assistant whose task is to Add new recipe nodes to a DRupal 11 site that uses the Demo Umami profile. Use your extensive knowledge of existing structure of recipe contemts taht comes with the umami profile, to ptoperly structure the content. You should use the 'create_recipe_node' tool to add new recipes. Based on the number of recipes to add, you can use this tool parallelly or over multiple loops.
+
+  Recipe category and Tags are taxonomy reference field. The terms available in these vocabularies would be given to you in cintext. You are allowed to choone one or more tems from these vocavbularies only.
+secured_system_prompt: '[ai_agent:agent_instructions]'
+tools:
+  'ai_agent:create_recipe_node': true
+tool_settings:
+  'ai_agent:create_recipe_node':
+    return_directly: 0
+orchestration_agent: false
+triage_agent: false
+max_loops: 3
+default_information_tools: |-
+  list_recipe_categories:
+    label: 'The tems avaialble under Recipe category vocabulary'
+    tool: 'ai_agent:list_taxonomy_term'
+    parameters:
+      vid: recipe_category
+  list_tags:
+    label: 'The tems avaialble under Tags vocabulary'
+    tool: 'ai_agent:list_taxonomy_term'
+    parameters:
+      vid: tags
+tool_usage_limits:
+  'ai_agent:create_recipe_node':
+    title:
+      action: ''
+      hide_property: 0
+      values: ''
+    preparation_time:
+      action: ''
+      hide_property: 0
+      values: ''
+    cooking_time:
+      action: ''
+      hide_property: 0
+      values: ''
+    servings:
+      action: ''
+      hide_property: 0
+      values: ''
+    difficulty:
+      action: ''
+      hide_property: 0
+      values: ''
+    recipe_category:
+      action: ''
+      hide_property: 0
+      values: ''
+    tags:
+      action: ''
+      hide_property: 0
+      values: ''
+    summary:
+      action: ''
+      hide_property: 0
+      values: ''
+    ingredients:
+      action: ''
+      hide_property: 0
+      values: ''
+    directions:
+      action: ''
+      hide_property: 0
+      values: ''
+exclude_users_role: false
+masquerade_roles: {  }

@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies: {  }
+id: recipe_reviewer
+label: 'Recipe reviewer'
+description: 'This tool is capable of reviewing cooking instructions for a given recipe. It would give a rating and some suggestions to improve the cooking instructions.'
+system_prompt: |-
+  You are revieing the cooking instructions updated by an agent, as per the user reuqets. YOu sole task is to look at the original cooking instructions, user request, and updated cooking instriction. Does the newly suggested isntructions satisy the actual requirement from user. Do you see any room for imrpovenet? Do you have any suggestions to make it further better, while respcting user. give a review score on 10 to the udated decription with 10 being the uughest indicating that the latest cooking instructions compeltely adhere to the original user request and 1 being lowest. If there are no differences between the existig descriptoiions and new descriptions, give rating as 0 and flag yhat
+
+  Your outout must be structured ike yhis
+
+  rating: your rating
+  feedback: Feedbacks to improve the cooking instructions
+
+  ------
+  The original cooking instructions were:
+  [node:field_recipe_instruction]
+
+
+  These are the Recipe details
+  Recipe name:
+  [node:title]
+
+  Recipe ingredients:
+  [node:field_ingredients]
+secured_system_prompt: '[ai_agent:agent_instructions]'
+tools: {  }
+tool_settings: {  }
+orchestration_agent: false
+triage_agent: false
+max_loops: 3
+default_information_tools: ''
+tool_usage_limits: {  }
+exclude_users_role: false
+masquerade_roles: {  }

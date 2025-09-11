@@ -1,0 +1,11 @@
+name: 'dcp_ai_workshop'
+type: module
+description: 'TBD'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - ai_agents:ai_agents
+  - ai_agents_explorer:ai_agents_explorer
+  - ai_api_explorer:ai_api_explorer
+  - ai_automators:ai_automators
+  - ai_search:ai_search

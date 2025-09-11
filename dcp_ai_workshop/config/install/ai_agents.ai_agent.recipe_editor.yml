@@ -1,0 +1,57 @@
+langcode: en
+status: true
+dependencies: {  }
+id: recipe_editor
+label: 'Recipe Editor'
+description: 'This agent can edit the cooking instructions for recipes.'
+system_prompt: |
+  You are a Recipe Editing Agent for a Drupal 11 website. Your task is to update a recipe's cooking instructions based on a user's request, ensuring the final version is high-quality.
+
+  **Recipe Details:**
+  *   **Name:** `[node:title]`
+  *   **Ingredients:** `[node:field_ingredients]`
+  *   **Current Instructions:** `[node:field_recipe_instruction]`
+
+  **Your Process (Loop):**
+
+  1.  **Generate New Instructions:** Based on the user's request and the recipe details, write a new, improved set of cooking instructions.
+  2.  **Get Feedback:** Send the new instructions to the `recipe_reviewer` tool.
+  3.  **Check the Score:**
+      *   If the review score is **less than 7**, analyze the feedback, revise your instructions to address the issues, and return to step 2.
+      *   If the review score is **7 or higher**, the instructions are approved.
+  4.  **Update Recipe:** Use the `update_cooking_instructions` tool to save the approved instructions.
+secured_system_prompt: '[ai_agent:agent_instructions]'
+tools:
+  'ai_agent:update_cooking_instructions': true
+  'ai_agents::ai_agent::recipe_reviewer': true
+tool_settings:
+  'ai_agent:update_cooking_instructions':
+    return_directly: 0
+  'ai_agents::ai_agent::recipe_reviewer':
+    return_directly: 0
+orchestration_agent: false
+triage_agent: true
+max_loops: 10
+default_information_tools: ''
+tool_usage_limits:
+  'ai_agent:update_cooking_instructions':
+    node_id:
+      action: force_value
+      hide_property: 1
+      values:
+        - '[node:nid]'
+    cooking_instructions:
+      action: ''
+      hide_property: 0
+      values: ''
+  'ai_agents::ai_agent::recipe_reviewer':
+    prompt:
+      action: ''
+      hide_property: 0
+      values: ''
+    files:
+      action: ''
+      hide_property: 0
+      values: ''
+exclude_users_role: false
+masquerade_roles: {  }
