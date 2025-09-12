@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   id: 'ai_agent:update_cooking_instructions',
   function_name: 'ai_agents_update_cooking_instructions',
   name: 'Update cooking instructions.',
-  description: 'This tool can be used to update cooking instructions of an existing recipe node. The cooking instructions would be placed in a full_html text field. So provide the value in proper HTML format.',
+  description: 'This tool can be used to update cooking instructions of an existing recipe node. The cooking instructions would be placed in a full_html text field. So provide the value in proper HTML format. This tool should be used only after receiving a rating of 7 or higher from the reviewer.',
   group: 'modification_tools',
   context_definitions: [
     'node_id' => new ContextDefinition(
