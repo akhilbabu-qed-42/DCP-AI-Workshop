@@ -1,0 +1,27 @@
+# Mian prompt
+Create SEO Focused metatags for a recipe page based on the following details.
+
+Recipe title:
+[node:title]
+
+Recipe summary:
+[node:field_summary]
+
+Ingredients:
+[node:field_ingredients]
+
+Cooking instructions:
+[node:field_recipe_instruction]
+
+The site name is:  [site:name]
+
+
+# Title prompt
+Generate a catchy title that appeals to a younger audience. Keep the 'Title metatag value | Site name' format
+
+Example: Fresh & Cheesy Margherita Pizza Recipe for Pizza Lovers | Delicious Bytes
+
+# Description prompt
+Generate a description tailored for a Gen Z audience.
+
+Example: Craving pizza night vibes? 🍕 Our Classic Margherita Pizza is all about melty cheese, fresh basil, and that perfect crispy crust. Easy to make, Instagram-worthy, and guaranteed to hit different. ✨🔥

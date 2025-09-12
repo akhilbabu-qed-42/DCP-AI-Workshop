@@ -1,0 +1,13 @@
+As a content writer, analyze the following recipe content and give up to five suggestions on how it can be made more engaging, in the same language. Keep each points short and concise.
+
+Recipe title:
+[node:title]
+
+Recipe summary:
+[node:field_summary]
+
+Ingredients:
+[node:field_ingredients]
+
+Cooking instructions:
+[node:field_recipe_instruction]

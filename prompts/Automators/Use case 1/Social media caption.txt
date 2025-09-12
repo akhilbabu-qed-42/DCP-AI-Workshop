@@ -1,0 +1,13 @@
+Create a caption for a social media post to share the following recipe, in the same language:
+
+Recipe title:
+[node:title]
+
+Recipe summary:
+[node:field_summary]
+
+Ingredients:
+[node:field_ingredients]
+
+Cooking instructions:
+[node:field_recipe_instruction]
