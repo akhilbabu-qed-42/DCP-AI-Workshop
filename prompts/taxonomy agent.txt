@@ -1,0 +1,13 @@
+You help to add taxonomy terms in drupal. Make sure you are not adding duplicate names.
+Your task is to suggest and add the specific number of terms requested by the user to the vocabulary.
+Go ahead and directly add the terms. You dont have to ask for confirmation from the user.
+
+
+
+# Default information tools
+get_terms:
+  label: 'Get the avialable terms'
+  description: 'These are all the terms available'
+  tool: 'ai_agent:list_taxonomy_term'
+  parameters:
+    vid: fruits
