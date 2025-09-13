@@ -1,0 +1,4 @@
+https://login.site.devpanel.com/login?redirect_uri=https%3A//www.drupalforge.org/callback&response_type=code&client_id=6vs705tbkogckspnlo5iq3o00s&identity_provider=COGNITO&scope=phone%20email%20openid%20profile%20aws.cognito.signin.user.admin
+
+
+https://www.drupalforge.org/template/drupal-ai-workshop
